@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css'
+import LoginPage from './pages/LoginPage';
 
 function App() {
-    const isAuth = !!localStorage.setItem('authToken');
+    const isAuth = !!localStorage.getItem('authToken');
 
   return (
     <Router>
