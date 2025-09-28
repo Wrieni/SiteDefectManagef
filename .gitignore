@@ -1,0 +1,33 @@
+# Фронтенд
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/logs
+*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+
+frontend/dist-ssr
+*.local
+
+.cache/
+.vscode/
+.idea/
+frontend/.cache/
+frontend/.vscode/
+frontend/.idea/
+
+# Бэкенд  
+backend/target/
+backend/.gradle/
+backend/.env
+backend/*.jar
+
+# Общие
+.DS_Store
+.idea/
+.vscode/
+*.log
