@@ -13,7 +13,11 @@ const users = [ // временные данные, заменить на реа
   { id: 'user-3', name: 'Charlie Brown' },
 ];
 
-
+const observers = [
+  { id: '5', name: 'Tom Observer', role: 'observer' },
+  { id: '6', name: 'Lisa Watcher', role: 'observer' },
+  { id: '7', name: 'David Monitor', role: 'observer' },
+];
 
 export function CreateTaskDialog({ onClose, onCreateTask }) {
   const [title, setTitle] = useState('');
@@ -66,7 +70,7 @@ export function CreateTaskDialog({ onClose, onCreateTask }) {
 
   return (
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
+            <div className="space-y-2">
             <Label htmlFor="title">Task Title *</Label>
             <Input
               id="title"
@@ -75,7 +79,7 @@ export function CreateTaskDialog({ onClose, onCreateTask }) {
               placeholder="Enter task title..."
               required
             />
-          </div>
+            </div>
 
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
@@ -124,7 +128,16 @@ export function CreateTaskDialog({ onClose, onCreateTask }) {
             <Label>Due Date *</Label>
                     //popover calendar
           </div>
+        <Label>Observers</Label>
 
+        <Select
+            options ={observers.map(observer => ({ value: observers.id, label: observers.name }))}
+            value={observers.find(observer => observers.id === assigneeId)}
+            onChange={(selected) => setAssigneeId(selected?.value)}
+            placeholder="Select assignee"
+            isClearable={false}
+        >
+        </Select>
 
           <div className="flex justify-end gap-2 pt-4 border-t">
             <Button type="button" variant="outline" onClick={onClose}>
