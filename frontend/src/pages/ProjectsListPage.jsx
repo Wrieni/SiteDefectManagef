@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { ProjectCard } from "../components/ProjectCard";
 import { Button } from "../components/ui/Button";
 import { Search, Filter, Plus, Grid, List } from "lucide-react";
@@ -38,6 +38,19 @@ export function ProjectsListPage({tasks, userRole, onTaskClick, onStatusChange, 
     return filtered;
   }, [tasks, userRole, searchQuery, statusFilter, priorityFilter, currentUserId]);
 
+  const groupedTasks = useMemo(() => ({
+    'new': filteredTasks.filter(t => t.status === 'new'),
+    'in-progress': filteredTasks.filter(t => t.status === 'in-progress'),
+    'review': filteredTasks.filter(t => t.status === 'review'),
+    'completed': filteredTasks.filter(t => t.status === 'completed'),
+  }), [filteredTasks]);
+
+  const statusColumns = [
+    { key: 'new', title: 'New', color: 'bg-blue-100 text-blue-800' },
+    { key: 'in-progress', title: 'In Progress', color: 'bg-yellow-100 text-yellow-800' },
+    { key: 'review', title: 'Review', color: 'bg-purple-100 text-purple-800' },
+    { key: 'completed', title: 'Completed', color: 'bg-green-100 text-green-800' }
+  ];
 
   return (
     <div className="space-y-6">
@@ -46,7 +59,9 @@ export function ProjectsListPage({tasks, userRole, onTaskClick, onStatusChange, 
           <h2 className="text-2xl">
             {userRole === 'executor' ? 'My Tasks' : 'All Tasks'}
           </h2>
-          
+          <p className="text-muted-foreground">
+            {filteredTasks.length} task{filteredTasks.length !== 1 ? 's' : ''} found
+          </p>     
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1 border rounded-lg p-1">
