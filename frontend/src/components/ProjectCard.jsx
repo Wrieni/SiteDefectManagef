@@ -1,5 +1,5 @@
 import { Button } from "./ui/Button";
-import { CardContent, CardDescription, CardHeader, CardTitle } from "./ui/Card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/Card";
 
 
 const statusColors = {
@@ -16,7 +16,7 @@ const priorityColors = {
     'Срочно': 'bg-red-100 text-red-800'
 };
 
-function ProjectCard(task){
+function ProjectCard({ task, userRole, onTaskClick, onStatusChange }){
 
     // получить инициалы
     const getInitials = (name) => {

@@ -7,8 +7,10 @@ const buttonVariants = {
   base: "inline-flex items-center justify-center",
   
   variant: {
-    default: "bg-primary text-primary-foreground",
-    destructive: "bg-destructive text-white"
+    default: "bg-primary text-foreground",
+    destructive: "bg-destructive text-white",
+    outline:
+          "border border-gray-300 bg-white text-gray-900 hover:bg-gray-100",
   },
   
   size: {

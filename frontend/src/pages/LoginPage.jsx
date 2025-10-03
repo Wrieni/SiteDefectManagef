@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../components/ui/Card";
+import { Button } from "../components/ui/Button";
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
@@ -29,9 +30,14 @@ const LoginPage = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
                         required>
                         </input>
-                        <input type='text' value={password} onChange={(e) => setPassword(e.target.value)}>
+                        <input type='text' value={password} onChange={(e) => setPassword(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                        required>
                         </input>
-                        <button type='submit'>Войти</button>
+                        <Button type='submit' 
+                            size="sm"
+                            variant="default"
+                            >Войти</Button>                       
                     </form>
                 </CardContent>
             </Card>
