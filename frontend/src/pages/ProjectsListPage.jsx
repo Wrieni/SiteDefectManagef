@@ -141,13 +141,15 @@ export function ProjectsListPage({tasks, userRole, onTaskClick, onStatusChange, 
 
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">       
+            {filteredTasks.map((task) => (
             <ProjectCard
               key={task.id}
               task={task}
               userRole={userRole}
               onTaskClick={onTaskClick}
               onStatusChange={onStatusChange}
-            />        
+            />
+          ))}     
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
