@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { ProjectCard } from "../components/ProjectCard";
 import { Button } from "../components/ui/Button";
 import { Search, Filter, Plus, Grid, List } from "lucide-react";
+import { Select } from "../components/ui/Select";
 
 export function ProjectsListPage({tasks, userRole, onTaskClick, onStatusChange, onCreateTask }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -52,6 +53,21 @@ export function ProjectsListPage({tasks, userRole, onTaskClick, onStatusChange, 
     { key: 'completed', title: 'Completed', color: 'bg-green-100 text-green-800' }
   ];
 
+  const prioritySelectOptions = [ //переписать на русский потом
+    { value: "all", label: "All Priority" },
+    { value: "low", label: "Low" },
+    { value: "medium", label: "Medium" },
+    { value: "high", label: "High" },
+    { value: "urgent", label: "Urgent" },
+  ];
+
+  const statusSelectOptions = [
+    { value: 'new', label: 'New' },
+    { value: 'in-progress', label: 'In Progress'},
+    { value: 'review', label: 'Review'},
+    { value: 'completed', label: 'Completed' }
+  ];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -92,8 +108,35 @@ export function ProjectsListPage({tasks, userRole, onTaskClick, onStatusChange, 
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search tasks..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
         </div>
         
+      </div>
+
+
+      <div className="flex gap-2">
+        <Select
+          options ={statusSelectOptions}
+          value={setStatusFilter.find(opt => opt.value === priorityFilter)}
+          onChange={(selected) => setPriorityFilter(selected?.value)}
+          placeholder="Priority"
+          isClearable={false} 
+        >
+        </Select>
+
+        <Select
+          options ={prioritySelectOptions}
+          value={setPriorityFilter.find(opt => opt.value === priorityFilter)}
+          onChange={(selected) => setPriorityFilter(selected?.value)}
+          placeholder="Priority"
+          isClearable={false} 
+        >
+        </Select>
       </div>
 
       {viewMode === 'grid' ? (
