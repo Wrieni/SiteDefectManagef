@@ -65,6 +65,16 @@ export function TaskDetailsPage({
     }
   };
 
+   const handleDeleteSubtask = (subtaskId) => {
+    const updatedSubtasks = subtasks.filter(subtask => subtask.id !== subtaskId);
+    setSubtasks(updatedSubtasks);
+    
+    if (onUpdateTask) {
+      onUpdateTask(task.id, { subtasks: updatedSubtasks });
+    }
+  };
+
+
   const [attachments] = useState([
     {
       id: '1',
@@ -280,7 +290,7 @@ export function TaskDetailsPage({
         </CardContent>
       </Card>
 
-      {userRole === 'executor' && task.assignee.id === 'current-user' && (
+        {userRole === 'executor' && task.assignee.id === 'current-user' && (
         <Card>
           <CardHeader>
             <CardTitle>Subtasks & Defects</CardTitle>
@@ -291,9 +301,57 @@ export function TaskDetailsPage({
               subtasks={subtasks}
               onAddSubtask={handleAddSubtask}
               onUpdateSubtask={handleUpdateSubtask}
+              onDeleteSubtask={handleDeleteSubtask}
               userRole={userRole}
               currentUser={getCurrentUserName()}
             />
+          </CardContent>
+        </Card>
+        )}
+
+        {userRole === 'manager' && subtasks.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Subtasks & Defects ({subtasks.length})</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {subtasks.map((subtask) => (
+                <div key={subtask.id} className="p-3 border rounded-lg">
+                  <div className="flex items-start justify-between mb-2">
+                    <h4 className={`font-medium ${subtask.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>
+                      {subtask.title}
+                    </h4>
+                    <div className="flex gap-2">
+                      <Badge className={`text-xs px-2 py-0 ${
+                        subtask.status === 'completed' ? 'bg-green-100 text-green-800' :
+                        subtask.status === 'in-progress' ? 'bg-blue-100 text-blue-800' :
+                        subtask.status === 'blocked' ? 'bg-red-100 text-red-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {subtask.status.replace('-', ' ')}
+                      </Badge>
+                      <Badge className={`text-xs px-2 py-0 ${
+                        subtask.priority === 'critical' ? 'bg-red-100 text-red-800' :
+                        subtask.priority === 'high' ? 'bg-orange-100 text-orange-800' :
+                        subtask.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {subtask.priority}
+                      </Badge>
+                    </div>
+                  </div>
+                  {subtask.description && (
+                    <p className="text-sm text-muted-foreground mb-2">
+                      {subtask.description}
+                    </p>
+                  )}
+                  <p className="text-xs text-muted-foreground">
+                    Created by {subtask.createdBy} on {subtask.createdAt.toLocaleDateString()}
+                  </p>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       )}
