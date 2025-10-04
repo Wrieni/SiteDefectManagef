@@ -65,6 +65,28 @@ export function TaskDetailsPage({
     }
   };
 
+  const [attachments] = useState([
+    {
+      id: '1',
+      name: 'design-mockup.pdf',
+      size: '2.4 MB',
+      type: 'PDF',
+      uploadedBy: 'John Doe',
+      uploadedAt: new Date('2024-01-15')
+    },
+    {
+      id: '2',
+      name: 'task-completion-report.docx',
+      size: '856 KB',
+      type: 'Document',
+      uploadedBy: 'Jane Smith',
+      uploadedAt: new Date('2024-01-16')
+    }
+  ]);
+
+  const getInitials = (name) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  };
 
   const getCurrentUserName = () => {
     if (userRole === 'manager') return 'Sarah Manager';
@@ -172,6 +194,60 @@ export function TaskDetailsPage({
             )}
           </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="space-y-2">
+              <Label className="flex items-center gap-2 text-xs">
+                <User className="h-3 w-3" />
+                Assignee
+              </Label>
+              <div className="flex items-center gap-2">
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src={task.assignee.avatar} />
+                  <AvatarFallback className="text-xs">
+                    {getInitials(task.assignee.name)}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-sm">{task.assignee.name}</span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="flex items-center gap-2 text-xs">
+                <User className="h-3 w-3" />
+                Reporter
+              </Label>
+              <div className="flex items-center gap-2">
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src={task.reporter.avatar} />
+                  <AvatarFallback className="text-xs">
+                    {getInitials(task.reporter.name)}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-sm">{task.reporter.name}</span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="flex items-center gap-2 text-xs">
+                <Calendar className="h-3 w-3" />
+                Due Date
+              </Label>
+              <p className={`text-sm ${isOverdue ? 'text-red-600' : ''}`}>
+                {task.dueDate.toLocaleDateString()}
+                {isOverdue && <span className="ml-2 text-xs">(Overdue)</span>}
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="flex items-center gap-2 text-xs">
+                <Clock className="h-3 w-3" />
+                Created
+              </Label>
+              <p className="text-sm">{task.createdAt.toLocaleDateString()}</p>
+            </div>
+          </div>
+
+
           {canChangeStatus && (
             <div className="flex gap-2 pt-2">
               {task.status === 'new' && (
@@ -203,6 +279,24 @@ export function TaskDetailsPage({
           )}
         </CardContent>
       </Card>
+
+      {userRole === 'executor' && task.assignee.id === 'current-user' && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Subtasks & Defects</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <SubtaskManager
+              taskId={task.id}
+              subtasks={subtasks}
+              onAddSubtask={handleAddSubtask}
+              onUpdateSubtask={handleUpdateSubtask}
+              userRole={userRole}
+              currentUser={getCurrentUserName()}
+            />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
