@@ -1,6 +1,8 @@
 
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
+import { Label } from "./ui/Label";
+import { Textarea } from "./ui/Textarea";
 import { Select } from "./ui/Select";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
@@ -126,7 +128,17 @@ export function CreateTaskDialog({ onClose, onCreateTask }) {
 
           <div className="space-y-2">
             <Label>Due Date *</Label>
-                    //popover calendar
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline">
+                  {dueDate ? format(dueDate, "PPP") : <span>Pick a date</span>}
+                  <CalendarIcon className="ml-2 h-4 w-4" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <Calendar selected={dueDate} onSelect={setDueDate} />
+              </PopoverContent>
+            </Popover>
           </div>
         <Label>Observers</Label>
 
