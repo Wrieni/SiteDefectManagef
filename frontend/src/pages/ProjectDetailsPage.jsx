@@ -35,6 +35,21 @@ export function TaskDetailsPage({
     priority: task.priority
   });
 
+
+  const statusColors = {
+    'new': 'bg-gray-100 text-gray-800',
+    'in-progress': 'bg-blue-100 text-blue-800',
+    'review': 'bg-yellow-100 text-yellow-800',
+    'completed': 'bg-green-100 text-green-800'
+  };
+
+  const priorityColors = {
+    'low': 'bg-gray-100 text-gray-700',
+    'medium': 'bg-yellow-100 text-yellow-800',
+    'high': 'bg-orange-100 text-orange-800',
+    'urgent': 'bg-red-100 text-red-800'
+  };
+
   const handleAddSubtask = (newSubtask) => {
     const subtask = {
       ...newSubtask,
@@ -355,6 +370,79 @@ export function TaskDetailsPage({
           </CardContent>
         </Card>
       )}
+
+      {/* attachments */}
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <Label className="flex items-center gap-2">
+              <Paperclip className="h-4 w-4" />
+              Attachments ({attachments.length})
+            </Label>
+            {canComment && (
+              <Button variant="outline" size="sm">
+                <Upload className="h-4 w-4 mr-2" />
+                Upload File
+              </Button>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            {attachments.map((attachment) => (
+              <div key={attachment.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
+                    <Paperclip className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{attachment.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {attachment.size} • Uploaded by {attachment.uploadedBy} on {attachment.uploadedAt.toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+                <Button variant="ghost" size="sm">
+                  Download
+                </Button>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* comments */}
+      <Card>
+        <CardHeader className="pb-3">
+          <Label className="flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" />
+            Comments
+          </Label>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {canComment && (
+            <div className="space-y-3">
+              <Textarea
+                placeholder="Add a comment..."
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                className="min-h-[80px]"
+              />
+              <div className="flex justify-end">
+                <Button 
+                  size="sm"
+                  disabled={!newComment.trim()}
+                  onClick={() => {
+                    setNewComment('');
+                  }}
+                >
+                  Add Comment
+                </Button>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
