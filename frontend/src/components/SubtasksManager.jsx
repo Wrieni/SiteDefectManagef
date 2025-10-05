@@ -5,7 +5,7 @@ import { Input } from "./ui/Input";
 import { Textarea } from "./ui/Textarea";
 import { Label } from "./ui/Label";
 import { Badge } from "./ui/Badge";
-import Select from "./ui/Select";
+import { Select } from "./ui/Select";
 import { Avatar, AvatarFallback } from "./ui/Avatar";
 import { 
   Plus, 
@@ -56,7 +56,6 @@ const priorityColors = {
 };
 
 export function SubtaskManager({ 
-  taskId, 
   subtasks, 
   onAddSubtask, 
   onUpdateSubtask, 

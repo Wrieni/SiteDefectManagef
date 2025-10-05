@@ -39,4 +39,4 @@ const CustomSelect = ({ options, value, onChange, placeholder, isClearable = tru
   );
 };
 
-export default CustomSelect;
+export { CustomSelect as Select };

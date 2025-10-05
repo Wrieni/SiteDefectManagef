@@ -1,10 +1,11 @@
-
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { Label } from "./ui/Label";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/Popover";
 import { Textarea } from "./ui/Textarea";
 import { Select } from "./ui/Select";
 import { CalendarIcon } from "lucide-react";
+import { Calendar } from "./ui/Calendar";
 import { useState } from "react";
 import { format } from "date-fns";
 
@@ -142,14 +143,13 @@ export function CreateTaskDialog({ onClose, onCreateTask }) {
           </div>
         <Label>Observers</Label>
 
-        <Select
-            options ={observers.map(observer => ({ value: observers.id, label: observers.name }))}
-            value={observers.find(observer => observers.id === assigneeId)}
-            onChange={(selected) => setAssigneeId(selected?.value)}
-            placeholder="Select assignee"
-            isClearable={false}
-        >
-        </Select>
+    <Select
+      options ={observers.map(o => ({ value: o.id, label: o.name }))}
+      value={observers.find(o => o.id === assigneeId) || null}
+      onChange={(selected) => setAssigneeId(selected?.value)}
+      placeholder="Select assignee"
+      isClearable={false}
+    />
 
           <div className="flex justify-end gap-2 pt-4 border-t">
             <Button type="button" variant="outline" onClick={onClose}>

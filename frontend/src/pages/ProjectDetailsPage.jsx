@@ -2,7 +2,9 @@ import { Button } from "../components/ui/Button";
 import { Textarea } from "../components/ui/Textarea";
 import { Input } from "../components/ui/Input";
 import { Label } from "../components/ui/Label";
-import { SubtaskManager } from "./SubtaskManager";
+import { SubtaskManager } from "../components/SubtasksManager";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/Avatar";
+import { Badge } from "../components/ui/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card";
 import { useState } from "react";
 import { 

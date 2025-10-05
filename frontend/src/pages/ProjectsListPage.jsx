@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
 import { ProjectCard } from "../components/ProjectCard";
 import { Button } from "../components/ui/Button";
+import { Input } from "../components/ui/Input";
 import { Search, Filter, Plus, Grid, List } from "lucide-react";
 import { Select } from "../components/ui/Select";
 
-export function ProjectsListPage({tasks, userRole, onTaskClick, onStatusChange, onCreateTask }) {
+export function ProjectsListPage({ tasks, userRole, onTaskClick, onStatusChange, onCreateTask, currentUserId = null }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
@@ -122,7 +123,7 @@ export function ProjectsListPage({tasks, userRole, onTaskClick, onStatusChange, 
       <div className="flex gap-2">
         <Select
           options ={statusSelectOptions}
-          value={setStatusFilter.find(opt => opt.value === priorityFilter)}
+          value={statusSelectOptions.find(opt => opt.value === priorityFilter)}
           onChange={(selected) => setPriorityFilter(selected?.value)}
           placeholder="Priority"
           isClearable={false} 
@@ -131,7 +132,7 @@ export function ProjectsListPage({tasks, userRole, onTaskClick, onStatusChange, 
 
         <Select
           options ={prioritySelectOptions}
-          value={setPriorityFilter.find(opt => opt.value === priorityFilter)}
+          value={prioritySelectOptions.find(opt => opt.value === priorityFilter)}
           onChange={(selected) => setPriorityFilter(selected?.value)}
           placeholder="Priority"
           isClearable={false} 
