@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Label } from "./ui/label";
-import { Badge } from "./ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Separator } from "./ui/separator";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card";
+import { Button } from "./ui/Button";
+import { Input } from "./ui/Input";
+import { Textarea } from "./ui/Textarea";
+import { Label } from "./ui/Label";
+import { Badge } from "./ui/Badge";
+import Select from "./ui/Select";
+import { Avatar, AvatarFallback } from "./ui/Avatar";
 import { 
   Plus, 
   CheckCircle2, 
@@ -138,7 +137,6 @@ export function SubtaskManager({
         )}
       </div>
 
-      {/* Add New Subtask Form */}
       {isAddingSubtask && canManageSubtasks && (
         <Card>
           <CardHeader>
@@ -169,27 +167,24 @@ export function SubtaskManager({
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Priority</Label>
-
                 <Select
-                options={prioritySelectOptions}
-                value={prioritySelectOptions.find(opt => opt.value === newSubtask.priority)}
-                onChange={(selected) => prioritySelectOptions(selected?.value)}
-                placeholder="Priority"
-                inClearable={false}
-                >
-                </Select>
+                  options={prioritySelectOptions}
+                  value={prioritySelectOptions.find(opt => opt.value === newSubtask.priority) || null}
+                  onChange={(selected) => setNewSubtask({ ...newSubtask, priority: selected?.value || 'medium' })}
+                  placeholder="Priority"
+                  isClearable={false}
+                />
               </div>
 
               <div className="space-y-2">
                 <Label>Status</Label>
                 <Select
-                options={statusSelectOptions}
-                value={statusSelectOptions.find(opt => opt.value === newSubtask.status)}
-                onChange={(selected) => statusSelectOptions(selected?.value)}
-                placeholder="Status"
-                inClearable={false}
-                >
-                </Select>
+                  options={statusSelectOptions}
+                  value={statusSelectOptions.find(opt => opt.value === newSubtask.status) || null}
+                  onChange={(selected) => setNewSubtask({ ...newSubtask, status: selected?.value || 'pending' })}
+                  placeholder="Status"
+                  isClearable={false}
+                />
               </div>
             </div>
 
@@ -211,7 +206,214 @@ export function SubtaskManager({
             </div>
           </CardContent>
         </Card>
-      )}  
+      )}
+
+      {/* список подзадач (дефектов) */}
+      <div className="space-y-3">
+        {subtasks.length === 0 ? (
+          <Card>
+            <CardContent className="py-8 text-center text-muted-foreground">
+              <Circle className="h-8 w-8 mx-auto mb-2 opacity-50" />
+              <p>No subtasks created yet</p>
+              {canManageSubtasks && (
+                <p className="text-sm mt-1">Add subtasks to break down this task into smaller items</p>
+              )}
+            </CardContent>
+          </Card>
+        ) : (
+          subtasks.map((subtask) => {
+            const StatusIcon = statusIcons[subtask.status];
+            const isEditing = editingSubtaskId === subtask.id;
+            
+            return (
+              <Card key={subtask.id} className="transition-all hover:shadow-sm">
+                <CardContent className="p-4">
+                  {isEditing ? (
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label>Title</Label>
+                        <Input
+                          value={editingSubtask.title || ''}
+                          onChange={(e) => setEditingSubtask({ ...editingSubtask, title: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Description</Label>
+                        <Textarea
+                          value={editingSubtask.description || ''}
+                          onChange={(e) => setEditingSubtask({ ...editingSubtask, description: e.target.value })}
+                          className="min-h-[60px]"
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label>Priority</Label>
+                          {
+                            (() => {
+                              const editPriorityOptions = [
+                                { value: 'low', label: 'Low' },
+                                { value: 'medium', label: 'Medium' },
+                                { value: 'high', label: 'High' },
+                                { value: 'critical', label: 'Critical' },
+                              ];
+                              return (
+                                <Select
+                                  options={editPriorityOptions}
+                                  value={editPriorityOptions.find(opt => opt.value === (editingSubtask.priority || 'medium')) || null}
+                                  onChange={(selected) => setEditingSubtask({ ...editingSubtask, priority: selected?.value || 'medium' })}
+                                  placeholder="Priority"
+                                  isClearable={false}
+                                />
+                              );
+                            })()
+                          }
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Status</Label>
+                          <Select 
+                            value={editingSubtask.status || 'pending'} 
+                            onValueChange={(value) => setEditingSubtask({ ...editingSubtask, status: value })}
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="pending">Pending</SelectItem>
+                              <SelectItem value="in-progress">In Progress</SelectItem>
+                              <SelectItem value="completed">Completed</SelectItem>
+                              <SelectItem value="blocked">Blocked</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" size="sm" onClick={handleCancelEdit}>
+                          <X className="h-4 w-4 mr-2" />
+                          Cancel
+                        </Button>
+                        <Button size="sm" onClick={handleSaveEdit}>
+                          <Save className="h-4 w-4 mr-2" />
+                          Save
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    /* View Mode */
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-3 flex-1">
+                          <StatusIcon className={`h-5 w-5 mt-0.5 ${
+                            subtask.status === 'completed' ? 'text-green-600' :
+                            subtask.status === 'in-progress' ? 'text-blue-600' :
+                            subtask.status === 'blocked' ? 'text-red-600' :
+                            'text-gray-400'
+                          }`} />
+                          <div className="flex-1">
+                            <h4 className={`font-medium ${subtask.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>
+                              {subtask.title}
+                            </h4>
+                            {subtask.description && (
+                              <p className="text-sm text-muted-foreground mt-1">
+                                {subtask.description}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                          <Badge className={`${statusColors[subtask.status]} text-xs px-2 py-1`}>
+                            {subtask.status.replace('-', ' ')}
+                          </Badge>
+                          <Badge className={`${priorityColors[subtask.priority]} text-xs px-2 py-1`}>
+                            {subtask.priority}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-5 w-5">
+                            <AvatarFallback className="text-xs">
+                              {currentUser.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span>Created {subtask.createdAt.toLocaleDateString()}</span>
+                          {subtask.updatedAt && subtask.updatedAt.getTime() !== subtask.createdAt.getTime() && (
+                            <span>• Updated {subtask.updatedAt.toLocaleDateString()}</span>
+                          )}
+                        </div>
+
+                        {canManageSubtasks && (
+                          <div className="flex items-center gap-1">
+                            {subtask.status !== 'completed' && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleStatusChange(subtask.id, 'completed')}
+                                className="h-6 px-2 text-xs"
+                              >
+                                <CheckCircle2 className="h-3 w-3 mr-1" />
+                                Complete
+                              </Button>
+                            )}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEditSubtask(subtask)}
+                              className="h-6 px-2"
+                            >
+                              <Edit3 className="h-3 w-3" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => onDeleteSubtask(subtask.id)}
+                              className="h-6 px-2 text-red-600 hover:text-red-700"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })
+        )}
+      </div>
+
+      {subtasks.length > 0 && (
+        <div className="mt-4 p-4 bg-muted/30 rounded-lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div>
+              <div className="text-lg font-medium text-blue-600">
+                {subtasks.filter(s => s.status === 'pending').length}
+              </div>
+              <div className="text-xs text-muted-foreground">Pending</div>
+            </div>
+            <div>
+              <div className="text-lg font-medium text-yellow-600">
+                {subtasks.filter(s => s.status === 'in-progress').length}
+              </div>
+              <div className="text-xs text-muted-foreground">In Progress</div>
+            </div>
+            <div>
+              <div className="text-lg font-medium text-green-600">
+                {subtasks.filter(s => s.status === 'completed').length}
+              </div>
+              <div className="text-xs text-muted-foreground">Completed</div>
+            </div>
+            <div>
+              <div className="text-lg font-medium text-red-600">
+                {subtasks.filter(s => s.status === 'blocked').length}
+              </div>
+              <div className="text-xs text-muted-foreground">Blocked</div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
