@@ -8,6 +8,7 @@ const buttonVariants = {
   
   variant: {
     default: "bg-primary text-foreground",
+    ghost: "bg-transparent text-foreground hover:bg-muted/50",
     destructive: "bg-destructive text-white",
     outline:
           "border border-gray-300 bg-white text-gray-900 hover:bg-gray-100",

@@ -22,13 +22,15 @@ const observers = [
   { id: '7', name: 'David Monitor', role: 'observer' },
 ];
 
-export function CreateTaskDialog({ onClose, onCreateTask }) {
+export function CreateTaskDialog({ isOpen = false, onClose, onCreateTask }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [assigneeId, setAssigneeId] = useState('');
   const [priority, setPriority] = useState('medium');
   const [dueDate, setDueDate] = useState();
   const [selectedObservers, setSelectedObservers] = useState([]);
+
+  if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();

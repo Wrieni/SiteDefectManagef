@@ -124,7 +124,7 @@ export function ProjectsListPage({ tasks, userRole, onTaskClick, onStatusChange,
         <Select
           options ={statusSelectOptions}
           value={statusSelectOptions.find(opt => opt.value === priorityFilter)}
-          onChange={(selected) => setPriorityFilter(selected?.value)}
+          onChange={(selected) => setStatusFilter(selected?.value)}
           placeholder="Priority"
           isClearable={false} 
         >
