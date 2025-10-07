@@ -1,16 +1,14 @@
 package com.example.backend.Domain.Mapper;
 
 import com.example.backend.Domain.*;
-import com.example.backend.Domain.DTOs.DefectCreateAttachmentDTO;
-import com.example.backend.Domain.DTOs.DefectCreateCommentDTO;
-import com.example.backend.Domain.DTOs.DefectCreateDTO;
-import com.example.backend.Domain.DTOs.DefectUpdateDTO;
-import com.example.backend.Domain.*;
-import com.example.backend.Domain.DTOs.*;
+import com.example.backend.Domain.DTOs.Defects.DefectCreateAttachmentDTO;
+import com.example.backend.Domain.DTOs.Defects.DefectCreateCommentDTO;
+import com.example.backend.Domain.DTOs.Defects.DefectCreateDTO;
+import com.example.backend.Domain.DTOs.Defects.DefectUpdateDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
+
 @Mapper(componentModel = "spring")
 public interface DefectMapper {
     // DefectCreateDTO -> Defect

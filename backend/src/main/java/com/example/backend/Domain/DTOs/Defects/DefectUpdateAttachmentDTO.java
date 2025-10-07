@@ -1,4 +1,4 @@
-package com.example.backend.Domain.DTOs;
+package com.example.backend.Domain.DTOs.Defects;
 
 public record DefectUpdateAttachmentDTO(
         Integer defectId,

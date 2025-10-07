@@ -1,6 +1,4 @@
-package com.example.backend.Domain.DTOs;
-
-import java.time.Instant;
+package com.example.backend.Domain.DTOs.Defects;
 
 public record DefectCreateDTO(
         String title,
