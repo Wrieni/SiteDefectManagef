@@ -16,7 +16,7 @@ public class Role {
     @Column(name = "name", length = 50)
     private String name;
 
-    @OneToMany(mappedBy = "idRole")
+    @OneToMany(mappedBy = "role")
     private Set<User> users = new LinkedHashSet<>();
 
     public Integer getId() {

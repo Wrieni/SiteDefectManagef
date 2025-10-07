@@ -1,5 +1,7 @@
 package com.example.backend.Domain.DTOs;
 
+import java.time.Instant;
+
 public record DefectHistoryDTO(
         Integer id,
         Integer defectId,

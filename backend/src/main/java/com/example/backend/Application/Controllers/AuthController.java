@@ -6,7 +6,6 @@ import com.example.backend.Domain.DTOs.UserDTO;
 import com.example.backend.Domain.Mapper.UserMapper;
 import com.example.backend.Domain.Role;
 import com.example.backend.Domain.User;
-import com.example.backend.Domain.UserDetails;
 import com.example.backend.Infrastucture.Repos.RoleRepository;
 import com.example.backend.Infrastucture.Repos.UserRepository;
 import com.example.backend.Infrastucture.Services.JWTService;
@@ -16,6 +15,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,8 +23,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-@Controller
+@RestController
 @RequestMapping("/api/auth")
 class AuthController {
     private final UserRepository userRepository;
@@ -62,7 +64,7 @@ class AuthController {
 
         User savedUser = userRepository.save(user);
 
-        UserDetails userDetails = (UserDetails) userDetailsService.loadUserByUsername(savedUser.getEmail());
+        org.springframework.security.core.userdetails.UserDetails userDetails = userDetailsService.loadUserByUsername(savedUser.getEmail());
 
         String jwtToken = jwtService.generateToken(userDetails);
 
@@ -75,7 +77,7 @@ class AuthController {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.password())
         );
-        UserDetails userDetails = (UserDetails) userDetailsService.loadUserByUsername(loginDTO.email());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.email());
 
         User user = userRepository.findByEmail(loginDTO.email()).orElseThrow(() -> new RuntimeException("User not found"));
         String jwtToken = jwtService.generateToken(userDetails);

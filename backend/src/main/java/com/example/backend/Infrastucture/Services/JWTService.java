@@ -1,10 +1,10 @@
 package com.example.backend.Infrastucture.Services;
 
-import com.example.backend.Domain.UserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -37,7 +37,7 @@ public class JWTService {
     public String generateTokenWithClaims(Map<String, Object> claims, UserDetails userDetails) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userDetails.getEmail())
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SECRET_KEY)
@@ -46,7 +46,7 @@ public class JWTService {
     }
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
-                .setSubject(userDetails.getEmail())
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SECRET_KEY)
@@ -56,7 +56,7 @@ public class JWTService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String email = extractEmail(token);
-        return (email.equals(userDetails.getEmail()) && isTokenExpired(token));
+        return (email.equals(userDetails.getUsername()) && isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token) {

@@ -1,6 +1,7 @@
 package com.example.backend.Infrastucture;
 
-import com.example.backend.Domain.UserDetails;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import com.example.backend.Infrastucture.Services.JWTService;
 import com.example.backend.Infrastucture.Services.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;

@@ -117,6 +117,14 @@ public class Project {
         return executor.getId();
     }
 
+    public User getManager() {
+        return manager;
+    }
+
+    public User getExecutor() {
+        return executor;
+    }
+
     public void setIdExecutor(User executor) {
         if (executor != null) {
             this.executor = executor;

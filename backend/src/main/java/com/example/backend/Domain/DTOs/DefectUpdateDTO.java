@@ -6,7 +6,6 @@ public record DefectUpdateDTO(
         String description,
         Integer executorId,
         Integer priority,
-        String status,
-        Integer projectId
+        String status
 ) {
 }
