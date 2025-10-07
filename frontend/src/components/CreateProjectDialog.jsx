@@ -8,6 +8,7 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/Calendar";
 import { useState } from "react";
 import { format } from "date-fns";
+import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose} from "./ui/Dialog";
 
 
 const users = [ // временные данные, заменить на реальных юзеров из пропсов или контекста
@@ -74,6 +75,11 @@ export function CreateTaskDialog({ isOpen = false, onClose, onCreateTask }) {
 
 
   return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+  <DialogContent className="sm:max-w-lg bg-white shadow-md">
+        <DialogHeader>
+          <DialogTitle>Create New Task</DialogTitle>
+        </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
             <Label htmlFor="title">Task Title *</Label>
@@ -128,7 +134,6 @@ export function CreateTaskDialog({ isOpen = false, onClose, onCreateTask }) {
                 </Select>
             </div>
           </div>
-
           <div className="space-y-2">
             <Label>Due Date *</Label>
             <Popover>
@@ -144,15 +149,13 @@ export function CreateTaskDialog({ isOpen = false, onClose, onCreateTask }) {
             </Popover>
           </div>
         <Label>Observers</Label>
-
-    <Select
-      options ={observers.map(o => ({ value: o.id, label: o.name }))}
-      value={observers.find(o => o.id === assigneeId) || null}
-      onChange={(selected) => setAssigneeId(selected?.value)}
-      placeholder="Select assignee"
-      isClearable={false}
-    />
-
+        <Select
+          options ={observers.map(o => ({ value: o.id, label: o.name }))}
+          value={observers.find(o => o.id === assigneeId) || null}
+          onChange={(selected) => setAssigneeId(selected?.value)}
+          placeholder="Select assignee"
+          isClearable={false}
+        />
           <div className="flex justify-end gap-2 pt-4 border-t">
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
@@ -162,5 +165,7 @@ export function CreateTaskDialog({ isOpen = false, onClose, onCreateTask }) {
             </Button>
           </div>
         </form>
+      </DialogContent>
+    </Dialog>
   );
 }

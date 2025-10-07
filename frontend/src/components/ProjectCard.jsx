@@ -18,7 +18,7 @@ const priorityColors = {
     'urgent': 'bg-red-100 text-red-800'
 };
 
-function ProjectCard({ task, userRole, onTaskClick, onStatusChange }){
+function ProjectCard({ task, onTaskClick }){
         const getInitials = (name) => name.split(' ').map(n => n[0]).join('').toUpperCase();
         const isOverdue = new Date() > new Date(task.dueDate) && task.status !== 'completed';
 

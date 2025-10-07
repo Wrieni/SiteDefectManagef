@@ -60,7 +60,7 @@
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --color-red-100: oklch(.936 .032 17.717);
+      --color-red-100: #ff0000; /* Example replacement */
     --color-red-200: oklch(.885 .062 18.334);
     --color-red-600: oklch(.577 .245 27.325);
     --color-red-700: oklch(.505 .213 27.518);
@@ -4404,6 +4404,8 @@
 
 :root {
   --radius: 1rem;
+  /* background for light theme (was missing) - used by many components like DialogContent */
+  --background: #ffffff;
   /* primary was almost black — use a blue primary to avoid dark fills */
   --primary: #0b5cff;          
   --primary-foreground: #ffffff;

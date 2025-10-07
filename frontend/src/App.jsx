@@ -245,7 +245,7 @@ export default function App() {
             <div className="p-4 pt-20 lg:pt-4">
               <nav className="space-y-2">
                 <Button
-                  variant={activeTab === 'dashboard' ? 'default' : 'ghost'}
+                  variant={activeTab === 'dashboard' ? 'selected' : 'ghost'}
                   className="w-full justify-start"
                   onClick={() => {
                     setActiveTab('dashboard');
@@ -257,7 +257,7 @@ export default function App() {
                 </Button>
                 
                 <Button
-                  variant={activeTab === 'tasks' ? 'default' : 'ghost'}
+                  variant={activeTab === 'tasks' ? 'selected' : 'ghost'}
                   className="w-full justify-start"
                   onClick={() => {
                     setActiveTab('tasks');
@@ -277,7 +277,7 @@ export default function App() {
                 {/* Only managers can access team management */}
                 {currentUserRole === 'manager' && (
                   <Button
-                    variant={activeTab === 'team' ? 'default' : 'ghost'}
+                    variant={activeTab === 'team' ? 'selected' : 'ghost'}
                     className="w-full justify-start"
                     onClick={() => {
                       setActiveTab('team');
