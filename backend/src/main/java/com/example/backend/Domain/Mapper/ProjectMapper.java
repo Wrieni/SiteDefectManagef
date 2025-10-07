@@ -31,6 +31,7 @@ public interface ProjectMapper {
         project.setComment(p.getComment());
         project.setStatus(p.getStatus());
         project.setCreatedAt(project.getCreatedAt());
+        return toDto(project);
     }
 
 }

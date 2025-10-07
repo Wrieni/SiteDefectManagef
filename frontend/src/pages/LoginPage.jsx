@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { setToken, setUserRole } from '../utils/auth'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
 
@@ -8,12 +9,22 @@ const LoginPage = () => {
 
     const handleSubmit = async(e) =>{
         e.preventDefault()
-        if (username == 'admin' && password == 'admin'){
-            localStorage.setItem('authToken', 'faketoken'),
-            localStorage.setItem('userRole', 'manager'),
+        try{
+            const res = await fetch('/api/auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: username, password })
+            })
+            if (!res.ok) {
+                const err = await res.text()
+                throw new Error(err || 'Login failed')
+            }
+            const data = await res.json()
+            setToken(data.token)
+            setUserRole(data.role)
             window.location.href='/'
-        }
-        else {
+        } catch(err){
+            console.error('Login error', err)
             alert('неверные данные')
         }
     }

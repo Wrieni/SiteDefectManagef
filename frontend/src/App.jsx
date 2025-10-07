@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { clearAuth } from './utils/auth';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css'
 import LoginPage from './pages/LoginPage';
@@ -183,7 +184,7 @@ export default function App() {
     }
   };
 
-  // const isAuth = !!localStorage.getItem('authToken');
+  // token is available via getToken() when needed
 
   return (
     <Router>
@@ -300,7 +301,7 @@ export default function App() {
               </nav>
 
               <div className="absolute bottom-4 left-4 right-4">
-                <Button variant="ghost" className="w-full justify-start text-muted-foreground">
+                <Button variant="ghost" className="w-full justify-start text-muted-foreground" onClick={() => { clearAuth(); window.location.href='/login' }}>
                   <LogOut className="h-4 w-4 mr-2" />
                   Logout
                 </Button>
