@@ -9,12 +9,14 @@ import com.example.backend.Domain.User;
 import com.example.backend.Infrastucture.Repos.ProjectRepository;
 import com.example.backend.Infrastucture.Repos.UserRepository;
 import com.example.backend.Infrastucture.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.ReadOnlyFileSystemException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ProjectService {
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
