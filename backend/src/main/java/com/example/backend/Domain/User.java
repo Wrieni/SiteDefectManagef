@@ -135,4 +135,5 @@ public class User {
         this.projects = projects;
     }
 
+    public Role getRole() {return role; }
 }
