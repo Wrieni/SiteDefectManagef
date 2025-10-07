@@ -1,4 +1,4 @@
-package com.example.backend;
+package com.example.backend.Domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -8,8 +8,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.Instant;
 
 @Entity
-@Table(name = "defects_attachments")
-public class DefectsAttachment {
+@Table(name = "defects_comments")
+public class DefectsComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -21,14 +21,12 @@ public class DefectsAttachment {
     private Defect idDefect;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_user")
     private User idUser;
 
-    @Column(name = "file_name")
-    private String fileName;
-
-    @Column(name = "file_path", length = 500)
-    private String filePath;
+    @Column(name = "comment_text", nullable = false, length = Integer.MAX_VALUE)
+    private String commentText;
 
     @ColumnDefault("now()")
     @Column(name = "created_at")
@@ -58,20 +56,12 @@ public class DefectsAttachment {
         this.idUser = idUser;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getCommentText() {
+        return commentText;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setCommentText(String commentText) {
+        this.commentText = commentText;
     }
 
     public Instant getCreatedAt() {

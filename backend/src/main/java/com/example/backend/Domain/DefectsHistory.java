@@ -1,4 +1,4 @@
-package com.example.backend;
+package com.example.backend.Domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -8,8 +8,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.Instant;
 
 @Entity
-@Table(name = "defects_comments")
-public class DefectsComment {
+@Table(name = "defects_history")
+public class DefectsHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -21,16 +21,21 @@ public class DefectsComment {
     private Defect idDefect;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_user")
     private User idUser;
 
-    @Column(name = "comment_text", nullable = false, length = Integer.MAX_VALUE)
-    private String commentText;
+    @Column(name = "file_name")
+    private String fileName;
+
+    @Column(name = "old_value", length = Integer.MAX_VALUE)
+    private String oldValue;
+
+    @Column(name = "new_value", length = Integer.MAX_VALUE)
+    private String newValue;
 
     @ColumnDefault("now()")
-    @Column(name = "created_at")
-    private Instant createdAt;
+    @Column(name = "changed_at")
+    private Instant changedAt;
 
     public Integer getId() {
         return id;
@@ -56,20 +61,36 @@ public class DefectsComment {
         this.idUser = idUser;
     }
 
-    public String getCommentText() {
-        return commentText;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setCommentText(String commentText) {
-        this.commentText = commentText;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
+    public String getOldValue() {
+        return oldValue;
     }
 
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
+    public void setOldValue(String oldValue) {
+        this.oldValue = oldValue;
+    }
+
+    public String getNewValue() {
+        return newValue;
+    }
+
+    public void setNewValue(String newValue) {
+        this.newValue = newValue;
+    }
+
+    public Instant getChangedAt() {
+        return changedAt;
+    }
+
+    public void setChangedAt(Instant changedAt) {
+        this.changedAt = changedAt;
     }
 
 }

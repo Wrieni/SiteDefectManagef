@@ -1,4 +1,4 @@
-package com.example.backend;
+package com.example.backend.Domain;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -8,8 +8,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.Instant;
 
 @Entity
-@Table(name = "defects_history")
-public class DefectsHistory {
+@Table(name = "defects_attachments")
+public class DefectsAttachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,15 +27,12 @@ public class DefectsHistory {
     @Column(name = "file_name")
     private String fileName;
 
-    @Column(name = "old_value", length = Integer.MAX_VALUE)
-    private String oldValue;
-
-    @Column(name = "new_value", length = Integer.MAX_VALUE)
-    private String newValue;
+    @Column(name = "file_path", length = 500)
+    private String filePath;
 
     @ColumnDefault("now()")
-    @Column(name = "changed_at")
-    private Instant changedAt;
+    @Column(name = "created_at")
+    private Instant createdAt;
 
     public Integer getId() {
         return id;
@@ -69,28 +66,20 @@ public class DefectsHistory {
         this.fileName = fileName;
     }
 
-    public String getOldValue() {
-        return oldValue;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setOldValue(String oldValue) {
-        this.oldValue = oldValue;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
-    public String getNewValue() {
-        return newValue;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
-    public void setNewValue(String newValue) {
-        this.newValue = newValue;
-    }
-
-    public Instant getChangedAt() {
-        return changedAt;
-    }
-
-    public void setChangedAt(Instant changedAt) {
-        this.changedAt = changedAt;
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
 }
