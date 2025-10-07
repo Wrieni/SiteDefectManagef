@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { clearAuth } from './utils/auth';
+import { clearAuth, getUserFirstName, getUserLastName } from './utils/auth';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css'
 import LoginPage from './pages/LoginPage';
@@ -175,7 +175,11 @@ export default function App() {
     setTasks(prevTasks => [newTask, ...prevTasks]);
   };
 
+  const cookieFirst = getUserFirstName();
+  const cookieLast = getUserLastName();
+
   const getCurrentUserName = () => {
+    if (cookieFirst || cookieLast) return `${cookieFirst || ''} ${cookieLast || ''}`.trim();
     switch (currentUserRole) {
       case 'manager': return 'Sarah Manager';
       case 'executor': return 'John Doe';
@@ -184,7 +188,6 @@ export default function App() {
     }
   };
 
-  // token is available via getToken() when needed
 
   return (
     <Router>

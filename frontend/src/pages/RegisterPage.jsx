@@ -24,7 +24,14 @@ const RegisterPage = () => {
                 const err = await res.text()
                 throw new Error(err || 'Register failed')
             }
-            window.location.href='/'
+             
+                try { 
+                   
+                    const { setUserFirstName, setUserLastName } = await import('../utils/auth');
+                    setUserFirstName(firstname);
+                    setUserLastName(lastname);
+                } catch { /* ignore */ }
+                window.location.href='/'
         } catch(err){
             console.error('Register error', err)
             alert('Ошибка регистрации')

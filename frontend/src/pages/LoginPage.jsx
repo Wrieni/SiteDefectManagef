@@ -22,6 +22,23 @@ const LoginPage = () => {
             const data = await res.json()
             setToken(data.token)
             setUserRole(data.role)
+            try {
+                const { getUserFirstName, getUserLastName, setUserFirstName, setUserLastName } = await import('../utils/auth')
+                const fn = getUserFirstName();
+                const ln = getUserLastName();
+                if (!fn && !ln) {
+                    const local = (data.email || username).split('@')[0];
+                    const parts = local.split(/[._\- ]+/);
+                    if (parts.length >= 2) {
+                        setUserFirstName(parts[0]);
+                        setUserLastName(parts.slice(1).join(' '));
+                    } else {
+                        setUserFirstName(parts[0]);
+                    }
+                }
+            } catch {
+                // ignore
+            }
             window.location.href='/'
         } catch(err){
             console.error('Login error', err)
