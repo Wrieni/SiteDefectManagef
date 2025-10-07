@@ -34,9 +34,18 @@ public class JWTService {
                 .parseClaimsJws(token).getBody();
     }
 
-    public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
+    public String generateTokenWithClaims(Map<String, Object> claims, UserDetails userDetails) {
         return Jwts.builder()
                 .setClaims(claims)
+                .setSubject(userDetails.getEmail())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SECRET_KEY)
+                .compact();
+
+    }
+    public String generateToken(UserDetails userDetails) {
+        return Jwts.builder()
                 .setSubject(userDetails.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
