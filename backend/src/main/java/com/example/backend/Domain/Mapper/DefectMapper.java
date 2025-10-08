@@ -1,16 +1,18 @@
 package com.example.backend.Domain.Mapper;
 
 import com.example.backend.Domain.*;
-import com.example.backend.Domain.DTOs.Defects.DefectCreateAttachmentDTO;
-import com.example.backend.Domain.DTOs.Defects.DefectCreateCommentDTO;
-import com.example.backend.Domain.DTOs.Defects.DefectCreateDTO;
-import com.example.backend.Domain.DTOs.Defects.DefectUpdateDTO;
+import com.example.backend.Domain.DTOs.Defects.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.factory.Mappers;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface DefectMapper {
+    DefectMapper INSTANCE = Mappers.getMapper(DefectMapper.class);
     // DefectCreateDTO -> Defect
     @Mapping(target = "title",      expression = "java(dto.title())")
     @Mapping(target = "description",expression = "java(dto.description())")
@@ -50,4 +52,52 @@ public interface DefectMapper {
     @Mapping(target = "id", ignore = true)
     DefectsComment toEntity(DefectCreateCommentDTO dto, Defect defect, User user);
 
+
+
+    default DefectResponseDTO toDto(Defect d) {
+        List<DefectAttachmentDTO> attachments = d.getDefectsAttachments().stream()
+                .map(this::toAttachmentDto)
+                .collect(Collectors.toList());
+        List<DefectCommentDTO> comments = d.getDefectsComments().stream()
+                .map(this::toCommentDto)
+                .collect(Collectors.toList());
+
+        Integer projId = d.getIdProject() != null ? d.getIdProject().getId() : null;
+        Integer execId = d.getIdExecutor() != null ? d.getIdExecutor().getId() : null;
+
+        return new DefectResponseDTO(
+                d.getId(),
+                d.getTitle(),
+                d.getDescription(),
+                projId,
+                execId,
+                d.getPriority(),
+                d.getStatus(),
+                d.getCreatedAt(),
+                d.getUpdatedAt(),
+                attachments,
+                comments
+        );
+    }
+
+    default DefectAttachmentDTO toAttachmentDto(DefectsAttachment a) {
+        return new DefectAttachmentDTO(
+                a.getId(),
+                a.getIdDefect() != null ? a.getIdDefect().getId() : null,
+                a.getIdUser() != null ? a.getIdUser().getId() : null,
+                a.getFileName(),
+                a.getFilePath(),
+                a.getCreatedAt()
+        );
+    }
+
+    default DefectCommentDTO toCommentDto(DefectsComment c) {
+        return new DefectCommentDTO(
+                c.getId(),
+                c.getIdDefect() != null ? c.getIdDefect().getId() : null,
+                c.getIdUser() != null ? c.getIdUser().getId() : null,
+                c.getCommentText(),
+                c.getCreatedAt()
+        );
+    }
 }
