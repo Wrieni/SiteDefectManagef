@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/project/{id}/details")
+@RequestMapping("/api/projects/{projectId}/defects")
 class DefectsController {
     private final DefectsService defectsService;
     public DefectsController(DefectsService defectsService) {
@@ -25,7 +25,7 @@ class DefectsController {
         return ResponseEntity.ok().body(defect);
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<DefectResponseDTO> getDefectById(@PathVariable Integer id) {
         return ResponseEntity.ok(defectsService.getById(id));
     }
