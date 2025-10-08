@@ -7,6 +7,7 @@ import { Select } from "./ui/Select";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/Calendar";
 import { useState } from "react";
+import { authFetch } from '../utils/auth';
 import { format } from "date-fns";
 import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose} from "./ui/Dialog";
 
@@ -33,33 +34,50 @@ export function CreateTaskDialog({ isOpen = false, onClose, onCreateTask }) {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim() || !assigneeId || !dueDate) {
       return;
     }
-    const assignee = users.find(u => u.id === assigneeId);
-    if (!assignee) return;
 
-    const newTask = {
-      id: Math.random().toString(36).substr(2, 9), // временный id
+    // Prepare ProjectCreateDTO
+    const dto = {
       title: title.trim(),
       description: description.trim(),
       status: 'new',
-      priority,
-      assignee: {
-        id: assignee.id,
-        name: assignee.name,
-      },
-      reporter: {
-        id: 'manager-1',
-        name: 'Current Manager', // заменить на текущего юзера
-      },
-      dueDate,
-      createdAt: new Date(),
-      observers: selectedObservers.length,
-      subtasks: [], 
+      createdAt: new Date().toISOString(),
+      managerId: 1, // TODO: replace with real manager id from auth/context
+      deadlineTime: dueDate ? new Date(dueDate).toISOString() : null,
+      comment: '',
+      executorId: null
     };
+
+    try {
+      const res = await authFetch('/api/projects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dto)
+      });
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(err || 'Failed to create project');
+      }
+      const created = await res.json();
+
+      // Map created ProjectResponseDTO to local task/project representation for UI
+      const newTask = {
+        id: created.id?.toString() || Math.random().toString(36).substr(2, 9),
+        title: created.title,
+        description: created.description,
+        status: created.status || 'new',
+        priority,
+        assignee: { id: assigneeId, name: users.find(u => u.id === assigneeId)?.name || 'Assignee' },
+        reporter: { id: 'manager-1', name: 'Current Manager' },
+        dueDate: created.deadlineTime ? new Date(created.deadlineTime) : dueDate,
+        createdAt: created.createdAt ? new Date(created.createdAt) : new Date(),
+        observers: selectedObservers.length,
+        subtasks: []
+      };
 
     onCreateTask(newTask);
     
@@ -71,6 +89,10 @@ export function CreateTaskDialog({ isOpen = false, onClose, onCreateTask }) {
     setSelectedObservers([]);
     
     onClose();
+    } catch (err) {
+      console.error('Create project error', err);
+      alert('Ошибка при создании проекта');
+    }
   };
 
 
