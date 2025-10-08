@@ -130,12 +130,11 @@ export function CreateTaskDialog({ isOpen = false, onClose, onCreateTask }) {
               <Label>Assignee *</Label>
               <Select
                 options ={users.map(user => ({ value: user.id, label: user.name }))}
-                value={users.find(user => user.id === assigneeId)}
+                value={assigneeId ? { value: assigneeId, label: users.find(u => u.id === assigneeId)?.name } : null}
                 onChange={(selected) => setAssigneeId(selected?.value)}
                 placeholder="Select assignee"
                 isClearable={false}
-              >          
-              </Select>
+              />
             </div>
 
             <div className="space-y-2">
@@ -165,7 +164,7 @@ export function CreateTaskDialog({ isOpen = false, onClose, onCreateTask }) {
                   <CalendarIcon className="ml-2 h-4 w-4" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent>
+              <PopoverContent className="z-60">
                 <Calendar selected={dueDate} onSelect={setDueDate} />
               </PopoverContent>
             </Popover>
@@ -173,10 +172,11 @@ export function CreateTaskDialog({ isOpen = false, onClose, onCreateTask }) {
         <Label>Observers</Label>
         <Select
           options ={observers.map(o => ({ value: o.id, label: o.name }))}
-          value={observers.find(o => o.id === assigneeId) || null}
-          onChange={(selected) => setAssigneeId(selected?.value)}
-          placeholder="Select assignee"
+          value={selectedObservers.length ? selectedObservers.map(id => ({ value: id, label: observers.find(o => o.id === id)?.name })) : null}
+          onChange={(selected) => setSelectedObservers(Array.isArray(selected) ? selected.map(s => s.value) : (selected ? [selected.value] : []))}
+          placeholder="Select observers"
           isClearable={false}
+          isMulti={true}
         />
           <div className="flex justify-end gap-2 pt-4 border-t">
             <Button type="button" variant="outline" onClick={onClose}>

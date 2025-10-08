@@ -21,7 +21,7 @@ const customStyles = {
   }),
   menu: (provided) => ({
     ...provided,
-    zIndex: 50, 
+    zIndex: 60, 
   }),
 };
 
@@ -34,6 +34,8 @@ const CustomSelect = ({ options, value, onChange, placeholder, isClearable = tru
       placeholder={placeholder}
       isClearable={isClearable}
       styles={customStyles}
+      menuPortalTarget={typeof document !== 'undefined' ? document.body : undefined}
+      menuPosition="fixed"
       {...props} 
     />
   );

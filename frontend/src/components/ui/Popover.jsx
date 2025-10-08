@@ -24,7 +24,7 @@ function PopoverContent({
         align={align}
         sideOffset={sideOffset}
         className={cn(
-          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out",
+          "z-60 bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out",
           className,
         )}
         {...props}
