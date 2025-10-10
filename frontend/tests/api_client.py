@@ -1,5 +1,4 @@
 import os
-import requests
 
 
 class APIClient:
@@ -16,11 +15,15 @@ class APIClient:
         return f"{self.base_url.rstrip('/')}{path}"
 
     def login(self, username: str, password: str) -> dict:
+        import requests
+
         resp = requests.post(self._url("/api/auth"), json={"username": username, "password": password})
         resp.raise_for_status()
         return resp.json()
 
     def register(self, username: str, password: str, first_name: str, last_name: str, role: str = "ROLE_USER") -> dict:
+        import requests
+
         payload = {
             "username": username,
             "password": password,
@@ -33,12 +36,16 @@ class APIClient:
         return resp.json()
 
     def create_project(self, token: str, payload: dict) -> dict:
+        import requests
+
         headers = {"Authorization": f"Bearer {token}"} if token else {}
         resp = requests.post(self._url("/api/projects"), json=payload, headers=headers)
         resp.raise_for_status()
         return resp.json()
 
     def get_projects(self, token: str | None = None) -> list:
+        import requests
+
         headers = {"Authorization": f"Bearer {token}"} if token else {}
         resp = requests.get(self._url("/api/projects"), headers=headers)
         resp.raise_for_status()

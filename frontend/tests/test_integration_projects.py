@@ -2,7 +2,7 @@ import os
 import pytest
 import requests
 
-from tests.api_client import APIClient
+from .api_client import APIClient
 
 
 def _skip_if_backend_unreachable(client: APIClient):

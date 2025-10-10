@@ -48,7 +48,7 @@ def test_multiselect_observers_shape():
 
 def test_create_project_calls_api(sample_payload):
     # Patch requests.post used by API client in integration layer
-    from tests.api_client import APIClient
+    from .api_client import APIClient
 
     client = APIClient("http://example.invalid")
 
